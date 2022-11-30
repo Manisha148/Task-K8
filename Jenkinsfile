@@ -14,17 +14,18 @@ node {
 
     stage('Test image') {
   
-
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
+  echo "test"
+        // app.inside {
+        //     sh 'echo "Tests passed"'
+        // }
     }
 
     stage('Push image') {
+        echo "push"
         
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-        }
+        // docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+        //     app.push("${env.BUILD_NUMBER}")
+        // }
     }
      stage('Trigger ManifestUpdate') {
                 echo "triggering updatemanifestjob"
