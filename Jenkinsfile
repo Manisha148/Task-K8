@@ -11,25 +11,25 @@ node {
 
     stage('Test image') {
   
-//   echo "test"
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
+  echo "test"
+        // app.inside {
+        //     sh 'echo "Tests passed"'
+        // }
     }
 
     stage('Push image') {
-        // echo "push"
+        echo "push"
         
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-        }
+        // docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+        //     app.push("${env.BUILD_NUMBER}")
+        // }
     }
     stage('Deploy'){
-        // echo "deploy"
+        echo "deploy"
     }
-     stage('Trigger ManifestUpdate') {
-                echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-        }
+    //  stage('Trigger ManifestUpdate') {
+    //             echo "triggering updatemanifestjob"
+    //             build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+    //     }
      
  }
