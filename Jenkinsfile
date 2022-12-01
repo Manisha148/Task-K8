@@ -6,7 +6,7 @@ node {
     }
 
     stage('Build image') {
-         app = docker.build("uditchauhan07/pipeline")
+         app = docker.build("uditchauhan07/pipeline:latest")
     }
 
     stage('Test image') {
