@@ -26,7 +26,7 @@ node {
             app.push("${env.BUILD_NUMBER}")
         }
     }
-     stage('Trigger ManifestUpdate') {
+     stage('Trigger updatemanifest2') {
                 echo "triggering updatemanifest2"
                 build job: 'updatemanifest2', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
