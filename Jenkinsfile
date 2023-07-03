@@ -2,33 +2,36 @@ node {
     def app
 
     stage('Clone repository') {
-      
-
         checkout scm
     }
 
     stage('Build image') {
-  
-       app = docker.build("manishaverma/javaimg")
+        app = docker.build("manishaverma/javaimg")
     }
 
     stage('Test image') {
-  
-
         app.inside {
             sh 'echo "Tests passed"'
         }
     }
 
     stage('Push image') {
-        
         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("${env.BUILD_NUMBER}")
         }
     }
-     stage('Trigger updatemanifest2') {
-                echo "triggering updatemanifest2"
-                build job: 'updatemanifest2', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-        }
 
+    stage('Deploy Helm chart') {
+        environment {
+            HELM_REPO_URL = '<repository-url>'
+            HELM_CHART_NAME = 'mychart'
+            HELM_RELEASE_NAME = 'myrelease'
+            HELM_NAMESPACE = 'mynamespace'
+        }
+        steps {
+            sh "helm repo add myrepo $HELM_REPO_URL"
+            sh "helm dependency update $HELM_CHART_NAME"
+            sh "helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_NAME --namespace $HELM_NAMESPACE"
+        }
+    }
 }
