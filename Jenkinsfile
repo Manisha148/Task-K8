@@ -23,10 +23,10 @@ node {
 
     stage('Deploy Helm chart') {
         environment {
-            HELM_REPO_URL = '<repository-url>'
-            HELM_CHART_NAME = 'mychart'
-            HELM_RELEASE_NAME = 'myrelease'
-            HELM_NAMESPACE = 'mynamespace'
+            HELM_REPO_URL = 'https://github.com/Manisha148/updatemanifest2.git'
+            HELM_CHART_NAME = ' webapp-0.1.0'
+            HELM_RELEASE_NAME = 'manisha'
+            HELM_NAMESPACE = 'default'
         }
         steps {
             sh "helm repo add myrepo $HELM_REPO_URL"
