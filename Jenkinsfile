@@ -22,16 +22,60 @@ node {
     }
 
     stage('Deploy Helm chart') {
-        environment {
-            HELM_REPO_URL = 'https://github.com/Manisha148/updatemanifest2.git'
-            HELM_CHART_NAME = ' webapp-0.1.0'
-            HELM_RELEASE_NAME = 'manisha'
-            HELM_NAMESPACE = 'default'
-        }
         steps {
-            sh "helm repo add myrepo $HELM_REPO_URL"
-            sh "helm dependency update $HELM_CHART_NAME"
-            sh "helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_NAME --namespace $HELM_NAMESPACE"
+            // Create a Helm chart for your application
+            
+            // Set the name of your Helm chart
+            def chartName = 'webapp'
+            
+            // Set the location to store the Helm chart
+            def chartPath = '.'
+            
+            // Run the 'helm create' command to create the Helm chart
+            sh "helm create $chartName"
+            
+            // Move the Helm chart to the desired location
+            sh "mv $chartName $chartPath/"
+            
+            // Package the Helm chart
+            
+            // Set the location of the Helm chart
+            def chartPackagePath = "$chartPath/$chartName"
+            
+            // Set the version of the Helm chart
+            def chartVersion = '0.1.0'
+            
+            // Run the 'helm package' command to package the Helm chart
+            sh "helm package $chartPackagePath --version $chartVersion"
+            
+            // Install or upgrade the Helm chart
+            
+            // Set the Helm release name
+            def releaseName = 'my-release'
+            
+            // Set the Helm chart repository URL
+            def chartRepo = 'https://github.com/Manisha148/updatemanifest2.git'
+            
+            // Add the Helm repository
+            sh "helm repo add my-repo $chartRepo"
+            
+            // Update the Helm repositories
+            sh 'helm repo update'
+            
+            // Install or upgrade the Helm chart
+            sh "helm upgrade --install $releaseName my-repo/$chartName --version $chartVersion"
+        }
+    }
+    
+    stage('Test') {
+        steps {
+            // Run tests or perform any other necessary steps
+        }
+    }
+    
+    stage('Cleanup') {
+        steps {
+            // Perform cleanup or any other necessary steps
         }
     }
 }
