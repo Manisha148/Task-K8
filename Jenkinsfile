@@ -25,20 +25,14 @@ pipeline {
         }
 
        stage('Deploy Helm chart') {
-       //      steps {
-       //           sh 'cd /home/ubuntu && ls'
+            steps {
+                 sh 'cd /home/ubuntu && ls'
 
                 
-       //          sh "helm install ingress-nginx /home/ubuntu/manisha/manisha-0.1.0.tgz  --namespace default --set controller.publishService.enabled=true --set controller.service.loadBalancerIP=${env.LB_IP}"
-       //      }
-       //  }
-        steps {
-                dir('/home/ubuntu') {
-                    // Your build steps here
-                    sh 'echo "Working directory: $PWD"'
-                    // Additional commands or build steps
-                }
+                sh "helm install ingress-nginx /home/ubuntu/manisha/manisha-0.1.0.tgz  --namespace default --set controller.publishService.enabled=true --set controller.service.loadBalancerIP=${env.LB_IP}"
             }
+        }
+    
        }
     }
 }
