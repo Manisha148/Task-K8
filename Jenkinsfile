@@ -26,8 +26,8 @@ pipeline {
 
        stage('Deploy Helm chart') {
             steps {
-                  sh '/home/ubuntu/'
-                   sh 'ls'
+                  sh 'ls /home/ubuntu/'
+                  
                 sh "helm install ingress-nginx /home/ubuntu/manisha/manisha-0.1.0.tgz  --namespace default --set controller.publishService.enabled=true --set controller.service.loadBalancerIP=${env.LB_IP}"
             }
         }
