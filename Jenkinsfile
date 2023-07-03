@@ -3,11 +3,11 @@ pipeline {
 
  
     stages {
-        stage('Clone repository') {
-            steps {
-                git 'https://github.com/Manisha148/Task-K8.git'
-            }
-        }
+        // stage('Clone repository') {
+        //     steps {
+        //         git 'https://github.com/Manisha148/Task-K8.git'
+        //     }
+        // }
 
         stage('Build image') {
             steps {
