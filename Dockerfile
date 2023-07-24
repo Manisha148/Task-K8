@@ -14,17 +14,21 @@
 #EXPOSE 9090
 
 
- FROM  centos:7
- RUN yum update -y
- RUN yum install -y httpd \
- zip \
- unzip
- RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
- ADD https://www.free-css.com/assets/files/free-css-templates/download/page265/shine.zip /var/www/html/
- WORKDIR /var/www/html/
+# Use the official Python base image as the base image
+FROM python:3.9
 
- RUN unzip shine.zip
- RUN cp -rvf shine/* .
- RUN rm -rf shine shine.zip
- CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
- EXPOSE 9090
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements.txt file to the container
+COPY requirements.txt .
+
+# Install the Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the entire Python app to the container
+COPY . .
+
+# Set the entry point for the container
+CMD ["python", "app.py"]
+
