@@ -15,7 +15,7 @@
 
 
 # Use the official Python base image as the base image
-FROM python:3.9
+FROM public.ecr.aws/docker/library/python:3.9
 
 # Set the working directory inside the container
 WORKDIR /app
