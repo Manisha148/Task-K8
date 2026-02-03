@@ -1,34 +1,29 @@
-#FROM  centos:7
-#RUN yum update -y
-#RUN yum install -y httpd \
-#zip \
-#unzip
-#RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
-#ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
-#WORKDIR /var/www/html/
-
-#RUN unzip photogenic.zip
-#RUN cp -rvf photogenic/* .
-#RUN rm -rf photogenic photogenic.zip
-#CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-#EXPOSE 9090
-
-
-# Use the official Python base image as the base image
+# Use Python image from Amazon Public ECR (avoids Docker Hub rate limits)
 FROM public.ecr.aws/docker/library/python:3.9
 
-# Set the working directory inside the container
+# Prevent Python from writing .pyc files and enable logs to be shown instantly
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory inside container
 WORKDIR /app
 
-# Copy the requirements.txt file to the container
+# Install system dependencies (optional, safe to keep)
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements first (better Docker layer caching)
 COPY requirements.txt .
 
-# Install the Python dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire Python app to the container
+# Copy rest of the application code
 COPY . .
 
-# Set the entry point for the container
-CMD ["python", "app.py"]
+# Expose app port (change if your app uses different port)
+EXPOSE 5000
 
+# Run the application
+CMD ["python", "app.py"]
